@@ -14,12 +14,25 @@ def forwards_func(apps, schema_editor):
                 image_path="", distance_near_univ="이화여자대학교 10km 이내", price_range="5,000원~10,000원"),
     ])
 
+    RunPythonExample = apps.get_model("moim", "RunPythonExample")
+    # (app_name, 해당 앱에서 model class명)
+    db_alias = schema_editor.connection.alias
+    RunPythonExample.objects.using(db_alias).bulk_create([
+        RunPythonExample(test_name="test_name_one", test_text="test_text_one"),
+        RunPythonExample(test_name="test_name_two", test_text="test_text_two"),
+    ])
+
 
 def reverse_func(apps, schema_editor):
     Meeting = apps.get_model("moim", "Meeting")
     db_alias = schema_editor.connection.alias
     Meeting.objects.using(db_alias).filter(name="규카츠 먹을래?").delete()
     Meeting.objects.using(db_alias).filter(name="우동 먹을래?").delete()
+
+    RunPythonExample = apps.get_model("moim", "RunPythonExample")
+    db_alias = schema_editor.connection.alias
+    RunPythonExample.objects.using(db_alias).filter(test_name="test_name_one").delete()
+    RunPythonExample.objects.using(db_alias).filter(test_name="test_name_two").delete()
 
 
 class Migration(migrations.Migration):

@@ -9,3 +9,8 @@ class Meeting(models.Model):
     image_path = models.ImageField(blank=True)
     distance_near_univ = models.TextField()
     price_range = models.TextField()
+
+
+class RunPythonExample(models.Model):
+    test_name = models.TextField()
+    test_text = models.TextField()
